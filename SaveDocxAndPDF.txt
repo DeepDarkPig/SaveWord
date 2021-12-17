@@ -1,0 +1,38 @@
+Sub SaveDocxAndPDF()
+'
+' SaveDocxAndPDF ??
+'
+'
+    Dim OldName, DocName, FolderPath As String
+    Dim Pos As Integer
+    
+    OldName = ActiveDocument.Name
+    
+    Pos = InStr(OldName, ".")
+    Pos = Pos - 1
+    DocName = Left(OldName, Pos)		'建立去除副檔名的檔案名稱
+    
+    'MsgBox (DocName)
+    
+    MsgBox ("New file (PDF & docx) will be saved in " & ActiveDocument.Path & "\" & DocName)
+    If Len(Dir(ActiveDocument.Path & "\" & DocName, vbDirectory)) = 0 Then		'建立與檔案同名的資料夾
+        MkDir (ActiveDocument.Path & "\" & DocName)
+    End If
+    
+    FolderPath = ActiveDocument.Path & "\" & DocName
+    
+    ActiveDocument.SaveAs2 _		'另存為PDF
+        FolderPath & "\" & DocName & ".pdf", _
+        FileFormat:=wdFormatPDF
+        
+    ActiveDocument.SaveAs2 _		'另存為docx
+        FolderPath & "\" & DocName & ".docx", _
+        FileFormat:=wdFormatXMLDocument
+
+    ActiveDocument.SaveAs2 _
+        FolderPath & ".docm", _		'為防正在使用的文件發生變更，重新另存為上一個目錄的docm
+        FileFormat:=wdFormatXMLDocumentMacroEnabled
+    
+End Sub
+
+
